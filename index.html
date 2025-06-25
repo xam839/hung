@@ -1,0 +1,1072 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>McDonald's Delivery App</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --mcdonalds-red: #DA020E;
+            --mcdonalds-yellow: #FFC72C;
+            --mcdonalds-dark-red: #C5050C;
+            --mcdonalds-light-yellow: #FFDD44;
+            --text-primary: #2C2C2C;
+            --text-secondary: #6C757D;
+            --bg-light: #F8F9FA;
+        }
+
+        * {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-light);
+            margin: 0;
+            padding: 0;
+        }
+
+      
+
+        .header-section {
+            background: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            padding: 9px 0;
+        }
+
+        .delivery-location h1 {
+            color: var(--text-primary);
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .delivery-location .subtitle {
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        .search-btn {
+            width: 45px;
+            height: 45px;
+            background: var(--bg-light);
+            border: none;
+            border-radius: 50%;
+            color: var(--text-secondary);
+            transition: all 0.3s ease;
+        }
+
+        .search-btn:hover {
+            background: var(--mcdonalds-yellow);
+            color: white;
+            transform: scale(1.05);
+        }
+
+        .profile-avatar {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            background: white;
+            border: 2px solid #E9ECEF;
+        }
+
+        .profile-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+        }
+
+        .order-info {
+            background: white;
+            padding: 9px 0;
+            border-bottom: 1px solid #E9ECEF;
+        }
+
+        .info-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .info-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .info-icon.price {
+            background: rgba(255, 199, 44, 0.2);
+            color: var(--mcdonalds-red);
+        }
+
+        .info-icon.time {
+            background: rgba(218, 2, 14, 0.1);
+            color: var(--mcdonalds-red);
+        }
+
+        .delivery-options {
+            background: white;
+            padding: 20px 0;
+        }
+
+        .delivery-option {
+            flex: 1;
+            padding: 20px;
+            border: 2px solid #E9ECEF;
+            border-radius: 20px;
+            background: white;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .delivery-option:hover {
+            border-color: var(--mcdonalds-yellow);
+            transform: translateY(-2px);
+        }
+
+        .delivery-option.active {
+            border-color: var(--mcdonalds-red);
+            background: rgba(218, 2, 14, 0.05);
+            transform: scale(1.02);
+        }
+
+        .delivery-option .icon {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .delivery-option .label {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .promo-banner {
+            margin: 20px 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .banner-image {
+            border-radius: 25px;
+            overflow: hidden;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .banner-image:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 35px rgba(0,0,0,0.15);
+        }
+
+        .banner-image img {
+            width: 60%;
+            height: 190px;
+            object-fit: fill;
+            display: block;
+            transition: transform 0.3s ease;
+        }
+
+        .banner-image:hover img {
+            transform: scale(1.02);
+        }
+
+        .pagination-dots {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 20px;
+        }
+
+        .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #DEE2E6;
+            transition: all 0.3s ease;
+        }
+
+        .dot.active {
+            background: var(--mcdonalds-red);
+            width: 24px;
+            border-radius: 12px;
+        }
+
+        .category-tabs {
+            padding: 20px 0;
+        }
+
+        .category-tab {
+            padding: 12px 24px;
+            border: 2px solid #E9ECEF;
+            border-radius: 25px;
+            background: white;
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            margin-right: 10px;
+        }
+
+        .category-tab:hover {
+            border-color: var(--mcdonalds-yellow);
+            color: var(--mcdonalds-red);
+        }
+
+        .category-tab.active {
+            background: var(--mcdonalds-red);
+            border-color: var(--mcdonalds-red);
+            color: white;
+        }
+
+        .menu-section {
+            padding: 20px 0;
+        }
+
+        .section-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 20px;
+        }
+
+        .menu-item {
+            background: white;
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            border: 1px solid #F1F3F4;
+            transition: all 0.3s ease;
+            margin-bottom: 15px;
+        }
+
+        .menu-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        }
+
+        .menu-item-image {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--mcdonalds-yellow), var(--mcdonalds-light-yellow));
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            position: relative;
+        }
+
+        .special-badge {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: var(--mcdonalds-red);
+            color: white;
+            font-size: 10px;
+            padding: 4px 8px;
+            border-radius: 10px;
+            font-weight: 600;
+        }
+
+        .menu-item-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+        }
+
+        .menu-item-description {
+            color: var(--text-secondary);
+            font-size: 14px;
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+
+        .rating-section {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .rating {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .rating .star {
+            color: var(--mcdonalds-yellow);
+        }
+
+        .rating-text {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .delivery-time {
+            color: var(--text-secondary);
+            font-size: 12px;
+        }
+
+        .price-section {
+            display: flex;
+            align-items: center;
+            justify-content: between;
+            gap: 15px;
+        }
+
+        .price {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .add-to-cart-btn {
+            background: var(--mcdonalds-red);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            flex-shrink: 0;
+        }
+
+        .add-to-cart-btn:hover {
+            background: var(--mcdonalds-dark-red);
+            transform: scale(1.05);
+        }
+
+        .heart-btn {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .heart-btn:hover {
+            color: var(--mcdonalds-red);
+            transform: scale(1.1);
+        }
+
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            border-top: 1px solid #E9ECEF;
+            padding: 10px 0;
+            z-index: 1000;
+        }
+
+        .nav-item {
+            text-align: center;
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            padding: 8px;
+            border-radius: 12px;
+        }
+
+        .nav-item:hover {
+            color: var(--mcdonalds-red);
+            background: rgba(218, 2, 14, 0.05);
+        }
+
+        .nav-item.active {
+            color: var(--mcdonalds-red);
+        }
+
+        .nav-item i {
+            font-size: 20px;
+            margin-bottom: 4px;
+            display: block;
+        }
+
+        .nav-item .label {
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .nav-item .badge {
+            position: absolute;
+            top: 5px;
+            right: 35%;
+            background: var(--mcdonalds-red);
+            color: white;
+            font-size: 10px;
+            padding: 2px 6px;
+            border-radius: 10px;
+            font-weight: 700;
+        }
+
+        .nav-item {
+            position: relative;
+        }
+
+        .favorites-section {
+            padding: 20px 0;
+            background: white;
+        }
+
+        .favorites-scroll {
+            display: flex;
+            gap: 15px;
+            overflow-x: auto;
+            padding: 10px 0 20px;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+
+        .favorites-scroll::-webkit-scrollbar {
+            display: none;
+        }
+
+        .favorite-card {
+            min-width: 120px;
+            background: var(--mcdonalds-yellow);
+            border-radius: 16px;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(255, 184, 14, 0.2);
+        }
+
+        .favorite-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(255, 184, 14, 0.3);
+        }
+
+        .favorite-image {
+            width: 80px;
+            height: 80px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        .favorite-image img {
+            width: 70px;
+            height: 70px;
+            object-fit: cover;
+            border-radius: 50%;
+        }
+
+        .favorite-name {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--mcdonalds-red);
+            margin-bottom: 5px;
+            line-height: 1.2;
+        }
+
+        .favorite-price {
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--mcdonalds-red);
+            margin: 0;
+        }
+
+        .product-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 16px;
+        }
+
+        .safe-area {
+            height: 80px;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 15px;
+            }
+            
+            .delivery-option {
+                padding: 15px;
+            }
+            
+            .promo-content {
+                padding: 20px;
+            }
+            
+            .promo-title {
+                font-size: 24px;
+            }
+            
+            .favorite-card {
+                min-width: 100px;
+                padding: 12px;
+            }
+            
+            .favorite-image {
+                width: 70px;
+                height: 70px;
+            }
+            
+            .favorite-image img {
+                width: 60px;
+                height: 60px;
+            }
+        }
+    </style>
+</head>
+<body>
+    
+
+    <!-- Header Section -->
+    <div class="header-section">
+        <div class="container">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <div class="delivery-location">
+                    <p class="text-muted mb-1" style="font-size: 14px; font-weight: 500;">Deliver to</p>
+                    <h1>Hafr Al-Batin Branch</h1>
+                    <p class="subtitle">Friend's</p>
+                </div>
+                <div class="d-flex align-items-center gap-3">
+                    <button class="search-btn">
+                        <i class="fas fa-search"></i>
+                    </button>
+                    <div class="profile-avatar">
+                        <img src="Image/logo.png" alt="App Logo">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Order Info -->
+    <div class="order-info">
+        <div class="container">
+            <div class="row">
+                <div class="col-6">
+                    <div class="info-item">
+                        <div class="info-icon price">
+                            <i class="fas fa-dollar-sign"></i>
+                        </div>
+                        <div>
+                            <p class="text-muted mb-0" style="font-size: 12px;">Minimum</p>
+                            <p class="fw-bold mb-0" style="color: var(--text-primary);">25.0 SAR</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="info-item">
+                        <div class="info-icon time">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <div>
+                            <p class="text-muted mb-0" style="font-size: 12px;">Delivery time</p>
+                            <p class="fw-bold mb-0" style="color: var(--text-primary);">60 min</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delivery Options -->
+    <div class="delivery-options">
+        <div class="container">
+            <div class="row g-3">
+                <div class="col-4">
+                    <div class="delivery-option active" onclick="selectDeliveryOption(this)">
+                        <div class="icon">🏠</div>
+                        <div class="label">Home Delivery</div>
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="delivery-option" onclick="selectDeliveryOption(this)">
+                        <div class="icon">🏪</div>
+                        <div class="label">Branch Pickup</div>
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="delivery-option" onclick="selectDeliveryOption(this)">
+                        <div class="icon">🚗</div>
+                        <div class="label">Car Pickup    ....</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Promotional Banner -->
+    <div class="container">
+        <div class="promo-banner">
+            <div class="banner-image">
+                <img src="Image/Red and Yellow Modern Fast Food Banner (460 x 200 px).png" alt="Promotional Banner" class="w-100">
+            </div>
+            <div class="pagination-dots">
+                <div class="dot active"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Category Tabs -->
+    <div class="category-tabs">
+        <div class="container">
+            <div class="d-flex flex-nowrap overflow-auto">
+                <a href="#" class="category-tab active">Tawfeer Menu</a>
+                <a href="#" class="category-tab">Our New</a>
+                <a href="#" class="category-tab">  famliey Boxes</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Menu Section -->
+    <div class="menu-section">
+        <div class="container">
+            <h2 class="section-title">Awafi Menu</h2>
+            
+            <!-- Menu Item 1 -->
+            <div class="menu-item">
+                <div class="row align-items-center">
+                    <div class="col-3">
+                        <div class="menu-item-image">
+                            <div class="special-badge">عروض خاصة</div>
+                            <img src="Image/hsimg-5549520.webp" alt="Grill Meal" class="product-image">
+                        </div>
+                    </div>
+                    <div class="col-9">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <h3 class="menu-item-title">Grill Meal</h3>
+                            <button class="heart-btn">
+                                <i class="far fa-heart"></i>
+                            </button>
+                        </div>
+                        
+                        <p class="menu-item-description">
+                            1 piece Saudi rice grill + 1 Umm Ali + 1 small soup + 2 drinks
+                        </p>
+                        
+                        <div class="rating-section">
+                            <div class="rating">
+                                <i class="fas fa-star star"></i>
+                                <span class="rating-text">4.8</span>
+                            </div>
+                            <span class="text-muted">•</span>
+                            <span class="delivery-time">15-20 min</span>
+                        </div>
+                        
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div class="price">45 SAR</div>
+                            <button class="add-to-cart-btn">Add to Cart</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Menu Item 2 -->
+            <div class="menu-item">
+                <div class="row align-items-center">
+                    <div class="col-3">
+                        <div class="menu-item-image">
+                            <div class="special-badge">جديد</div>
+                            <img src="Image/hsimg-5549535.webp" alt="Chicken Combo" class="product-image">
+                        </div>
+                    </div>
+                    <div class="col-9">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <h3 class="menu-item-title">Chicken Combo</h3>
+                            <button class="heart-btn">
+                                <i class="far fa-heart"></i>
+                            </button>
+                        </div>
+                        
+                        <p class="menu-item-description">
+                            Crispy chicken breast + fries + coleslaw + soft drink
+                        </p>
+                        
+                        <div class="rating-section">
+                            <div class="rating">
+                                <i class="fas fa-star star"></i>
+                                <span class="rating-text">4.6</span>
+                            </div>
+                            <span class="text-muted">•</span>
+                            <span class="delivery-time">12-18 min</span>
+                        </div>
+                        
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div class="price">38 SAR</div>
+                            <button class="add-to-cart-btn">Add to Cart</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Menu Item 3 -->
+            <div class="menu-item">
+                <div class="row align-items-center">
+                    <div class="col-3">
+                        <div class="menu-item-image">
+                            <img src="Image/تورتيه.webp" alt="Beef Burger" class="product-image">
+                        </div>
+                    </div>
+                    <div class="col-9">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <h3 class="menu-item-title">Beef Burger Deluxe</h3>
+                            <button class="heart-btn">
+                                <i class="far fa-heart"></i>
+                            </button>
+                        </div>
+                        
+                        <p class="menu-item-description">
+                            Premium beef patty + lettuce + tomato + cheese + special sauce
+                        </p>
+                        
+                        <div class="rating-section">
+                            <div class="rating">
+                                <i class="fas fa-star star"></i>
+                                <span class="rating-text">4.9</span>
+                            </div>
+                            <span class="text-muted">•</span>
+                            <span class="delivery-time">10-15 min</span>
+                        </div>
+                        
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div class="price">32 SAR</div>
+                            <button class="add-to-cart-btn">Add to Cart</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Menu Item 4 -->
+            <div class="menu-item">
+                <div class="row align-items-center">
+                    <div class="col-3">
+                        <div class="menu-item-image">
+                            <div class="special-badge">مميز</div>
+                            <img src="Image/ستربس.webp" alt="Shawarma Plate" class="product-image">
+                        </div>
+                    </div>
+                    <div class="col-9">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <h3 class="menu-item-title">Shawarma Plate</h3>
+                            <button class="heart-btn">
+                                <i class="far fa-heart"></i>
+                            </button>
+                        </div>
+                        
+                        <p class="menu-item-description">
+                            Tender chicken shawarma + rice + salad + garlic sauce + pickles
+                        </p>
+                        
+                        <div class="rating-section">
+                            <div class="rating">
+                                <i class="fas fa-star star"></i>
+                                <span class="rating-text">4.7</span>
+                            </div>
+                            <span class="text-muted">•</span>
+                            <span class="delivery-time">18-25 min</span>
+                        </div>
+                        
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div class="price">42 SAR</div>
+                            <button class="add-to-cart-btn">Add to Cart</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Menu Item 5 -->
+            <div class="menu-item">
+                <div class="row align-items-center">
+                    <div class="col-3">
+                        <div class="menu-item-image">
+                            <img src="Image/كلوب.webp" alt="Fish Meal" class="product-image">
+                        </div>
+                    </div>
+                    <div class="col-9">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <h3 class="menu-item-title">Grilled Fish Meal</h3>
+                            <button class="heart-btn">
+                                <i class="far fa-heart"></i>
+                            </button>
+                        </div>
+                        
+                        <p class="menu-item-description">
+                            Fresh grilled fish + steamed vegetables + lemon rice + tahini sauce
+                        </p>
+                        
+                        <div class="rating-section">
+                            <div class="rating">
+                                <i class="fas fa-star star"></i>
+                                <span class="rating-text">4.5</span>
+                            </div>
+                            <span class="text-muted">•</span>
+                            <span class="delivery-time">20-30 min</span>
+                        </div>
+                        
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div class="price">48 SAR</div>
+                            <button class="add-to-cart-btn">Add to Cart</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Menu Item 6 -->
+            <div class="menu-item">
+                <div class="row align-items-center">
+                    <div class="col-3">
+                        <div class="menu-item-image">
+                            <div class="special-badge">الأكثر طلباً</div>
+                            <img src="Image/سبايسي.webp" alt="Pizza Slice" class="product-image">
+                        </div>
+                    </div>
+                    <div class="col-9">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <h3 class="menu-item-title">Margherita Pizza</h3>
+                            <button class="heart-btn">
+                                <i class="far fa-heart"></i>
+                            </button>
+                        </div>
+                        
+                        <p class="menu-item-description">
+                            Fresh mozzarella + tomato sauce + basil + olive oil on crispy crust
+                        </p>
+                        
+                        <div class="rating-section">
+                            <div class="rating">
+                                <i class="fas fa-star star"></i>
+                                <span class="rating-text">4.8</span>
+                            </div>
+                            <span class="text-muted">•</span>
+                            <span class="delivery-time">15-22 min</span>
+                        </div>
+                        
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div class="price">35 SAR</div>
+                            <button class="add-to-cart-btn">Add to Cart</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bottom Navigation -->
+    <div class="bottom-nav">
+        <div class="container">
+            <div class="row text-center">
+                <div class="col">
+                    <a href="index.html" class="nav-item">
+                        <i class="fas fa-utensils"></i>
+                        <div class="label">Menu</div>
+                    </a>
+                </div>
+                <div class="col">
+                    <a href="Awafi.html" class="nav-item">
+                        <i class="fas fa-star"></i>
+                        <div class="label">Reword</div>
+                    </a>
+                </div>
+                <div class="col">
+                    <a href="cart.html" class="nav-item">
+                        <i class="fas fa-shopping-cart"></i>
+                        <div class="badge">2</div>
+                        <div class="label">Cart</div>
+                    </a>
+                </div>
+                <div class="col">
+                    <a href="Offers.html" class="nav-item">
+                        <i class="fas fa-gift"></i>
+                        <div class="label">Offers</div>
+                    </a>
+                </div>
+                <div class="col">
+                    <a href="profile.html" class="nav-item active">
+                        <i class="fas fa-user"></i>
+                        <div class="label">Profile</div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Safe Area -->
+    <div class="safe-area"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function selectDeliveryOption(element) {
+            // Remove active class from all options
+            document.querySelectorAll('.delivery-option').forEach(option => {
+                option.classList.remove('active');
+            });
+            
+            // Add active class to clicked option
+            element.classList.add('active');
+        }
+
+        // Add smooth scrolling and interactive features
+        document.addEventListener('DOMContentLoaded', function() {
+            // Animate elements on scroll
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+
+            const observer = new IntersectionObserver(function(entries) {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, observerOptions);
+
+            // Animate menu items
+            document.querySelectorAll('.menu-item').forEach(item => {
+                item.style.opacity = '0';
+                item.style.transform = 'translateY(20px)';
+                item.style.transition = 'all 0.6s ease';
+                observer.observe(item);
+            });
+
+            // Heart button functionality
+            document.querySelectorAll('.heart-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const icon = this.querySelector('i');
+                    if (icon.classList.contains('far')) {
+                        icon.classList.remove('far');
+                        icon.classList.add('fas');
+                        this.style.color = 'var(--mcdonalds-red)';
+                    } else {
+                        icon.classList.remove('fas');
+                        icon.classList.add('far');
+                        this.style.color = 'var(--text-secondary)';
+                    }
+                });
+            });
+
+            // Category tab functionality
+            document.querySelectorAll('.category-tab').forEach(tab => {
+                tab.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    document.querySelectorAll('.category-tab').forEach(t => t.classList.remove('active'));
+                    this.classList.add('active');
+                });
+            });
+
+            // Add to cart animation for favorites
+            function addToCart(itemName) {
+                // Show add to cart animation
+                const card = event.currentTarget;
+                card.style.transform = 'scale(0.95)';
+                
+                // Create floating animation
+                const icon = card.querySelector('.favorite-image img');
+                const rect = icon.getBoundingClientRect();
+                
+                // Create floating element
+                const floatingIcon = document.createElement('div');
+                floatingIcon.innerHTML = `<img src="${icon.src}" style="width: 30px; height: 30px; border-radius: 50%;">`;
+                floatingIcon.style.cssText = `
+                    position: fixed;
+                    left: ${rect.left}px;
+                    top: ${rect.top}px;
+                    z-index: 9999;
+                    pointer-events: none;
+                    transition: all 0.8s ease-out;
+                `;
+                document.body.appendChild(floatingIcon);
+                
+                // Animate to cart
+                setTimeout(() => {
+                    const cartIcon = document.querySelector('.bottom-nav .fa-shopping-cart');
+                    const cartRect = cartIcon.getBoundingClientRect();
+                    
+                    floatingIcon.style.left = cartRect.left + 'px';
+                    floatingIcon.style.top = cartRect.top + 'px';
+                    floatingIcon.style.transform = 'scale(0.5)';
+                    floatingIcon.style.opacity = '0';
+                }, 100);
+                
+                // Clean up
+                setTimeout(() => {
+                    floatingIcon.remove();
+                    card.style.transform = 'translateY(-5px)';
+                    
+                    // Show success message
+                    showFavoriteToast(`${itemName} added to cart!`);
+                }, 900);
+            }
+
+            function showFavoriteToast(message) {
+                // Create toast notification
+                const toast = document.createElement('div');
+                toast.style.cssText = `
+                    position: fixed;
+                    top: 100px;
+                    left: 50%;
+                    transform: translateX(-50%);
+                    background: var(--mcdonalds-yellow);
+                    color: var(--mcdonalds-red);
+                    padding: 12px 24px;
+                    border-radius: 25px;
+                    font-weight: 600;
+                    z-index: 9999;
+                    animation: toastSlideIn 0.3s ease-out;
+                    box-shadow: 0 8px 25px rgba(255, 184, 14, 0.4);
+                `;
+                toast.textContent = message;
+                document.body.appendChild(toast);
+                
+                // Remove after delay
+                setTimeout(() => {
+                    toast.style.animation = 'toastSlideOut 0.3s ease-out';
+                    setTimeout(() => toast.remove(), 300);
+                }, 2000);
+            }
+
+            // Add to cart animation
+            document.querySelectorAll('.add-to-cart-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const originalText = this.textContent;
+                    this.textContent = 'Added!';
+                    this.style.background = 'var(--mcdonalds-yellow)';
+                    this.style.color = 'var(--mcdonalds-red)';
+                    
+                    setTimeout(() => {
+                        this.textContent = originalText;
+                        this.style.background = 'var(--mcdonalds-red)';
+                        this.style.color = 'white';
+                    }, 1500);
+                });
+            });
+        });
+    </script>
+</body>
+</html>
